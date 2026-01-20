@@ -13,6 +13,11 @@ FIST-DTIA (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and A
 * **Hybrid Representation**: Combines 1D sequence features (ESM-2 for proteins, Morgan Fingerprints for drugs) with 2D Graph Neural Networks (GAT) and 3D Voxel encoders.
 
 ---
+### 🌐 Data Access
+You can access the processed dataset files (including CSV labels, PDB structures, and ESM embeddings) via the following link:
+> **Google Drive Path**: [https://drive.google.com/drive/folders/1U_bl2IDNV-FqyBD4tMJKbDQzEBiLYbin?hl=zh_CN](https://drive.google.com/drive/folders/1U_bl2IDNV-FqyBD4tMJKbDQzEBiLYbin?hl=zh_CN)
+
+
 ## 📊 Benchmark Datasets and Resources
 FIST-DTIA was rigorously validated on twelve public benchmarks, spanning varied species, target families (e.g., kinases, nuclear receptors, ion channels), and experimental measurement types.
 ### Drug-Target Affinity (DTA) Regression
