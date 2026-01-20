@@ -3,17 +3,17 @@
 
 
 ## 💡 FIST-DTIA Framework
-**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) 是一个旨在通过多维度特征融合捕捉分子结合机制的深度学习框架。该模型通过整合 1D 序列、2D 拓扑图和 3征 3D 空间表征，实现了对药物-靶标相互作用（DTI）和结合亲和力（DTA）的高精度双重预测 [cite: 8, 47]。
+**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) 是一个旨在通过多维度特征融合捕捉分子结合机制的深度学习框架。该模型通过整合 1D 序列、2D 拓扑图和 3征 3D 空间表征，实现了对药物-靶标相互作用（DTI）和结合亲和力（DTA）的高精度双重预测 。
 
 ### 核心架构创新：
 1. **药效团感知 3D 体素化 (Pharmacophore-Aware 3D Voxelization)**：
-   - **配体表征**：结合 GNN 超节点聚合机制提取功能基团，并利用 3D CNN 通过体素图编码显式的药效团空间分布 [cite: 9, 54, 67]。
+   - **配体表征**：结合 GNN 超节点聚合机制提取功能基团，并利用 3D CNN 通过体素图编码显式的药效团空间分布 。
 2. **3D Swin Transformer 蛋白质表征**：
-   - **高效抽象**：采用压缩的 3D 体素化策略处理蛋白质结构 [cite: 10, 55]。
-   - **全局上下文**：利用 3D Swin Transformer 的 W-MSA 和 SW-MSA 机制捕捉蛋白质的全局结构信息和长程空间依赖关系 [cite: 52, 632]。
+   - **高效抽象**：采用压缩的 3D 体素化策略处理蛋白质结构 。
+   - **全局上下文**：利用 3D Swin Transformer 的 W-MSA 和 SW-MSA 机制捕捉蛋白质的全局结构信息和长程空间依赖关系 。
 3. **双任务预测输出 (Dual-Prediction Output)**：
-   - **DTA 回归头**：输出连续的亲和力数值（如 $pK_d$, $pK_i$），使用 MSE 损失函数进行优化 [cite: 72, 270]。
-   - **DTI 分类头**：通过 Softmax 层输出相互作用的概率 [cite: 72, 271]。
+   - **DTA 回归头**：输出连续的亲和力数值（如 $pK_d$, $pK_i$），使用 MSE 损失函数进行优化 。
+   - **DTI 分类头**：通过 Softmax 层输出相互作用的概率 。
 
 ---
 
@@ -33,8 +33,8 @@
 ## 📁 数据集
 FIST-DTIA 在 12 个基准数据集上进行了广泛验证，涵盖了多种生物学场景：
 
-**DTI 分类数据集**：包括 BindingDB (最大靶标多样性), DrugBank, BioSNAP 以及专门的离子通道 (IC) 和核受体 (E) 数据集 [cite: 283, 293]。
-**DTA 回归数据集**：包括 Davis (激酶聚焦), KIBA, Metz 和大规模的 ToxCast 毒性亲和力数据集 [cite: 297, 299, 303]。
+**DTI 分类数据集**：包括 BindingDB (最大靶标多样性), DrugBank, BioSNAP 以及专门的离子通道 (IC) 和核受体 (E) 数据集 。
+**DTA 回归数据集**：包括 Davis (激酶聚焦), KIBA, Metz 和大规模的 ToxCast 毒性亲和力数据集 。
 
 ---
 
@@ -43,7 +43,7 @@ FIST-DTIA 在 12 个基准数据集上进行了广泛验证，涵盖了多种生
 ### 环境要求
 - Linux (测试环境：CUDA 12.4)
 - Python 3.9+
-- NVIDIA GeForce RTX 3090/4090 (24G) [cite: 222]
+- NVIDIA GeForce RTX 3090/4090 (24G) 
 
 ### 安装步骤
 ```bash
