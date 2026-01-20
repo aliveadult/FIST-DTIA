@@ -1,50 +1,53 @@
 # FIST-DTIA: Pharmacophore-Aware 3D Voxelization for Drug-Target Interaction and Affinity Dual-Prediction
 
-<img width="2587" height="1528" alt="FIST-DTIA Model Architecture" src="https://github.com/aliveadult/FIST-DTIA/raw/main/figure1.png" />
+
 
 ## 💡 FIST-DTIA Framework
-[cite_start]**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) is a multi-modal deep learning framework designed to capture the complex "lock-and-key" mechanisms of molecular binding[cite: 8, 28]. [cite_start]By integrating 1D sequence data, 2D topological graphs, and 3D structural voxelization, FIST-DTIA provides robust dual-predictions for both drug–target interaction (DTI) and binding affinity (DTA)[cite: 11, 47].
+**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) 是一个旨在通过多维度特征融合捕捉分子结合机制的深度学习框架。该模型通过整合 1D 序列、2D 拓扑图和 3征 3D 空间表征，实现了对药物-靶标相互作用（DTI）和结合亲和力（DTA）的高精度双重预测 [cite: 8, 47]。
 
-### Core Architectural Innovations:
-1. [cite_start]**Pharmacophore-Aware Drug Representation:** - Combines a GNN-based super-node aggregation mechanism to extract functional groups (pharmacophores) from 2D graphs[cite: 9, 54, 131].
-   - [cite_start]Utilizes a 3D CNN to encode explicit spatial pharmacophore distributions via 7-channel voxel maps (H-Donor, H-Acceptor, Aromatic, etc.)[cite: 9, 150, 153].
-2. [cite_start]**3D Swin Transformer for Protein Encoding:** - Employs a condensed 3D voxelization strategy (4 channels: density, hydrophobicity, and charge) for protein structures[cite: 10, 204, 237].
-   - [cite_start]Captures global structural contexts and long-range dependencies using a **3D Swin Transformer** (W-MSA/SW-MSA), bypassing traditional all-atom computational bottlenecks[cite: 10, 52, 242].
-3. [cite_start]**Dual-Prediction Module:** The framework hierarchically fuses features via Cross-Scale Attention and outputs through two dedicated heads[cite: 53, 72, 111]:
-   - [cite_start]**DTA Regression Head:** Predicts continuous affinity values (e.g., $pK_d$, $pK_i$), optimized via MSE Loss[cite: 72, 270].
-   - [cite_start]**DTI Classification Head:** Predicts binary interaction probability via a Softmax layer[cite: 72, 271].
+### 核心架构创新：
+1. **药效团感知 3D 体素化 (Pharmacophore-Aware 3D Voxelization)**：
+   - **配体表征**：结合 GNN 超节点聚合机制提取功能基团，并利用 3D CNN 通过体素图编码显式的药效团空间分布 [cite: 9, 54, 67]。
+2. **3D Swin Transformer 蛋白质表征**：
+   - **高效抽象**：采用压缩的 3D 体素化策略处理蛋白质结构 [cite: 10, 55]。
+   - **全局上下文**：利用 3D Swin Transformer 的 W-MSA 和 SW-MSA 机制捕捉蛋白质的全局结构信息和长程空间依赖关系 [cite: 52, 632]。
+3. **双任务预测输出 (Dual-Prediction Output)**：
+   - **DTA 回归头**：输出连续的亲和力数值（如 $pK_d$, $pK_i$），使用 MSE 损失函数进行优化 [cite: 72, 270]。
+   - **DTI 分类头**：通过 Softmax 层输出相互作用的概率 [cite: 72, 271]。
 
 ---
 
-## 🧠 Project Structure
-The implementation is organized into modular components for structural abstraction and model training:
+## 🧠 项目结构与代码说明
+根据代码库的实际实现，主要文件功能如下：
 
-| File Name | Description |
+| 文件名 | 功能描述 |
 | :--- | :--- |
-| `mains.py` | [cite_start]Primary execution script for the **5-fold cross-validation** workflow and dual-task training/evaluation[cite: 308]. |
-| `models.py` | [cite_start]Defines the `HGDDTI` architecture, featuring the `StructuralEncoder`, `3D Swin Transformer` modules, and the multi-modal fusion head[cite: 53]. |
-| `utilss.py` | [cite_start]Core utilities for **3D Voxelization**, pharmacophore mapping, and graph construction with super-nodes[cite: 67, 148]. |
-| `configss.py` | [cite_start]Configuration for hyperparameters (e.g., d_model: 256), voxel resolution ($32^3$), and data paths[cite: 151, 619]. |
-| `evaluations.py` | [cite_start]Metric calculations for classification (Acc, AUC, AUPR) and regression (MSE, CI, $R_m^2$)[cite: 330, 331]. |
+| `mains.py` | 主执行程序，管理 **5 折交叉验证** 流程、模型初始化及训练/评估循环。 |
+| `models.py` | 定义 `HGDDTI` 模型架构，包含 `StructuralEncoder` (GAT-based) 以及用于多模态融合的 `fusion_head`。 |
+| `utilss.py` | 核心工具类，包含基于 **K-Means 的 3D 结构聚类**、药效团感知 2D 图构建及 PDB/SMILES 数据处理。 |
+| `configss.py` | 全局配置文件，定义超参数（如 `d_model: 256`）、体素网格分辨率及数据路径。 |
+| `evaluations.py` | 评估模块，计算分类（Acc, AUC, AUPR）与回归（MSE, CI, $R_m^2$）的各项指标。 |
 
 ---
 
-## 📁 Datasets & Evaluation
-[cite_start]FIST-DTIA is rigorously validated across 12 benchmark datasets[cite: 338]:
+## 📁 数据集
+FIST-DTIA 在 12 个基准数据集上进行了广泛验证，涵盖了多种生物学场景：
 
-* [cite_start]**DTI Classification:** Validated on DrugBank, Davis, KIBA, IC, E, BindingDB, BioSNAP, and Human datasets [cite: 283-291].
-* [cite_start]**DTA Regression:** Quantitatively assessed on Davis, KIBA, Metz, and ToxCast benchmarks[cite: 295, 303].
-* [cite_start]**Cold-Start Scenarios:** Proven robust in "Cold-drug" and "Cold-drug & target" settings, demonstrating superior generalization to novel chemical entities [cite: 315-322].
+**DTI 分类数据集**：包括 BindingDB (最大靶标多样性), DrugBank, BioSNAP 以及专门的离子通道 (IC) 和核受体 (E) 数据集 [cite: 283, 293]。
+**DTA 回归数据集**：包括 Davis (激酶聚焦), KIBA, Metz 和大规模的 ToxCast 毒性亲和力数据集 [cite: 297, 299, 303]。
 
 ---
 
-## 🛠️ Setup & Usage
+## 🛠️ 环境搭建与使用
 
-### Installation
+### 环境要求
+- Linux (测试环境：CUDA 12.4)
+- Python 3.9+
+- NVIDIA GeForce RTX 3090/4090 (24G) [cite: 222]
+
+### 安装步骤
 ```bash
-# Clone the repository
 git clone [https://github.com/aliveadult/FIST-DTIA.git](https://github.com/aliveadult/FIST-DTIA.git)
 cd FIST-DTIA
-
-# Install dependencies
-pip install torch torch-geometric rdkit biopython pandas tqdm
+pip install -r requirements.txt
+# 主要依赖: torch, torch_geometric, rdkit, biopython, scikit-learn
