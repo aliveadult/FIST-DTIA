@@ -6,13 +6,13 @@
 FIST-DTIA (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) is a multimodal deep learning framework designed to capture the intricate landscape of molecular interactions. By integrating drug and protein features across 1D sequences and 3D structures, the model provides robust dual-predictions for drug discovery.
 
 ### Core Architectural Innovations
-1. **Pharmacophore-Aware Drug Representation**
+**Pharmacophore-Aware Drug Representation**
    - Combines a GNN-based super-node aggregation mechanism for functional group extraction.
    - Utilizes a 3D CNN to encode explicit spatial pharmacophore distributions via 7-channel voxel maps (H-Donor, Aromatic, Hydrophobic, etc.).
-2. **3D Swin Transformer for Protein Encoding**
+**3D Swin Transformer for Protein Encoding**
    - Employs a condensed 3D voxelization strategy (4 channels: density, hydrophobicity, charge) to bypass the computational bottlenecks of all-atom modeling.
    - Captures global structural contexts and long-range dependencies using alternating Window-based MSA (W-MSA) and Shifted-Window MSA (SW-MSA).
-3. **Dual-Prediction Module**
+**Dual-Prediction Module**
    - The framework hierarchically fuses features via Cross-Scale Attention and outputs two distinct results:
      - **DTA Regression Head:** Predicts continuous binding affinity values (e.g., $pK_d$, $pK_i$).
      - **DTI Classification Head:** Predicts binary interaction probabilities.
