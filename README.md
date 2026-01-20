@@ -1,6 +1,6 @@
 # FIST-DTIA: Pharmacophore-Aware 3D Voxelization for Drug-Target Interaction and Affinity Dual-Prediction
 
-![FIST-DTIA Framework Architecture](https://github.com/user-attachments/assets/eff08ef9-eec1-4017-b94e-5ae8ae9c908f)
+![image](https://github.com/user-attachments/assets/eff08ef9-eec1-4017-b94e-5ae8ae9c908f)
 *Figure: The FIST-DTIA framework integrates 1D sequence data, 2D pharmacophore-aware graphs, and 3D structural voxels via a Swin Transformer and Cross-Scale Attention for dual-task prediction.*
 
 ## 🧪 Scientific Framework
