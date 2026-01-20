@@ -3,51 +3,58 @@
 
 
 ## 💡 FIST-DTIA Framework
-**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) 是一个旨在通过多维度特征融合捕捉分子结合机制的深度学习框架。该模型通过整合 1D 序列、2D 拓扑图和 3征 3D 空间表征，实现了对药物-靶标相互作用（DTI）和结合亲和力（DTA）的高精度双重预测 。
+FIST-DTIA (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) is a multimodal deep learning framework designed to capture the intricate landscape of molecular interactions. By integrating drug and protein features across 1D sequences and 3D structures, the model provides robust dual-predictions for drug discovery.
 
-### 核心架构创新：
-1. **药效团感知 3D 体素化 (Pharmacophore-Aware 3D Voxelization)**：
-   - **配体表征**：结合 GNN 超节点聚合机制提取功能基团，并利用 3D CNN 通过体素图编码显式的药效团空间分布 。
-2. **3D Swin Transformer 蛋白质表征**：
-   - **高效抽象**：采用压缩的 3D 体素化策略处理蛋白质结构 。
-   - **全局上下文**：利用 3D Swin Transformer 的 W-MSA 和 SW-MSA 机制捕捉蛋白质的全局结构信息和长程空间依赖关系 。
-3. **双任务预测输出 (Dual-Prediction Output)**：
-   - **DTA 回归头**：输出连续的亲和力数值（如 $pK_d$, $pK_i$），使用 MSE 损失函数进行优化 。
-   - **DTI 分类头**：通过 Softmax 层输出相互作用的概率 。
+### Core Architectural Innovations
+1. **Pharmacophore-Aware Drug Representation**
+   - Combines a GNN-based super-node aggregation mechanism for functional group extraction.
+   - Utilizes a 3D CNN to encode explicit spatial pharmacophore distributions via 7-channel voxel maps (H-Donor, Aromatic, Hydrophobic, etc.).
+2. **3D Swin Transformer for Protein Encoding**
+   - Employs a condensed 3D voxelization strategy (4 channels: density, hydrophobicity, charge) to bypass the computational bottlenecks of all-atom modeling.
+   - Captures global structural contexts and long-range dependencies using alternating Window-based MSA (W-MSA) and Shifted-Window MSA (SW-MSA).
+3. **Dual-Prediction Module**
+   - The framework hierarchically fuses features via Cross-Scale Attention and outputs two distinct results:
+     - **DTA Regression Head:** Predicts continuous binding affinity values (e.g., $pK_d$, $pK_i$).
+     - **DTI Classification Head:** Predicts binary interaction probabilities.
 
 ---
 
-## 🧠 项目结构与代码说明
-根据代码库的实际实现，主要文件功能如下：
+## 🧠 Project Structure
+The implementation is organized into modular components for data processing and model training:
 
-| 文件名 | 功能描述 |
+| File Name | Description |
 | :--- | :--- |
-| `mains.py` | 主执行程序，管理 **5 折交叉验证** 流程、模型初始化及训练/评估循环。 |
-| `models.py` | 定义 `HGDDTI` 模型架构，包含 `StructuralEncoder` (GAT-based) 以及用于多模态融合的 `fusion_head`。 |
-| `utilss.py` | 核心工具类，包含基于 **K-Means 的 3D 结构聚类**、药效团感知 2D 图构建及 PDB/SMILES 数据处理。 |
-| `configss.py` | 全局配置文件，定义超参数（如 `d_model: 256`）、体素网格分辨率及数据路径。 |
-| `evaluations.py` | 评估模块，计算分类（Acc, AUC, AUPR）与回归（MSE, CI, $R_m^2$）的各项指标。 |
+| `mains.py` | Primary execution file managing the K-Fold cross-validation, training loops, and metric reporting. |
+| `models.py` | Defines the `HGDDTI` architecture, including 3D structural encoders and the dual-prediction fusion head. |
+| `utilss.py` | Utility functions for K-Means structural clustering, 2D/3D graph construction, and pharmacophore mapping. |
+| `configss.py` | Global configuration for hyperparameters, voxel dimensions, and ESM embedding settings. |
+| `evaluations.py` | Functions for calculating classification (AUC, AUPR) and regression (MSE, CI) metrics. |
 
 ---
 
-## 📁 数据集
-FIST-DTIA 在 12 个基准数据集上进行了广泛验证，涵盖了多种生物学场景：
+## 📁 Dataset & Evaluation
+FIST-DTIA is evaluated on twelve diverse benchmark datasets:
 
-**DTI 分类数据集**：包括 BindingDB (最大靶标多样性), DrugBank, BioSNAP 以及专门的离子通道 (IC) 和核受体 (E) 数据集 。
-**DTA 回归数据集**：包括 Davis (激酶聚焦), KIBA, Metz 和大规模的 ToxCast 毒性亲和力数据集 。
+### Quantitative & Qualitative Benchmarks
+* **DTA Regression:** Davis ($pK_d$), KIBA (KIBA score), Metz ($pK_i$), and ToxCast ($AC_{50}$).
+* **DTI Classification:** BindingDB, DrugBank, BioSNAP, Human, E (Enzymes), and IC (Ion Channels).
+
+### Performance Highlights
+* **SOTA Accuracy:** Outperforms existing baselines across all 12 benchmarks.
+* **Generalization:** Maintains high stability in "Cold-drug" and "Cold-drug & target" scenarios.
+* **Interpretability:** Validated through case studies on Type I (Erlotinib) and Allosteric (Trametinib) inhibitors.
 
 ---
 
-## 🛠️ 环境搭建与使用
+## 🛠️ Environment Setup
+Developed and tested on Linux with CUDA 12.4 using NVIDIA GeForce RTX 4090.
 
-### 环境要求
-- Linux (测试环境：CUDA 12.4)
-- Python 3.9+
-- NVIDIA GeForce RTX 3090/4090 (24G) 
-
-### 安装步骤
 ```bash
+# 1. Clone the repository
 git clone [https://github.com/aliveadult/FIST-DTIA.git](https://github.com/aliveadult/FIST-DTIA.git)
-cd FIST-DTIA
-pip install -r requirements.txt
-# 主要依赖: torch, torch_geometric, rdkit, biopython, scikit-learn
+
+# 2. Install dependencies
+pip install torch torch-geometric rdkit-pypi biopython scikit-learn pandas tqdm
+
+# 3. Configure data paths in configss.py and run
+python mains.py
