@@ -1,72 +1,50 @@
 # FIST-DTIA: Pharmacophore-Aware 3D Voxelization for Drug-Target Interaction and Affinity Dual-Prediction
 
-<img width="2587" height="1528" alt="FIST-DTIA Framework" src="https://github.com/user-attachments/assets/你的图片链接" />
+<img width="2587" height="1528" alt="FIST-DTIA Model Architecture" src="https://github.com/aliveadult/FIST-DTIA/raw/main/figure1.png" />
 
 ## 💡 FIST-DTIA Framework
-**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) is a state-of-the-art multimodal deep learning framework designed for the dual-prediction of drug–target interaction (DTI) and binding affinity (DTA). 
+[cite_start]**FIST-DTIA** (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) is a multi-modal deep learning framework designed to capture the complex "lock-and-key" mechanisms of molecular binding[cite: 8, 28]. [cite_start]By integrating 1D sequence data, 2D topological graphs, and 3D structural voxelization, FIST-DTIA provides robust dual-predictions for both drug–target interaction (DTI) and binding affinity (DTA)[cite: 11, 47].
 
-By synergizing 1D sequence information with explicit 3D spatial representations, the model achieves high accuracy and robustness in molecular recognition tasks. The architecture centers on two primary innovations:
-
-1. **Pharmacophore-Aware 3D Voxelization:**
-   - **Ligand Representation:** Combines a GNN-based super-node aggregation mechanism to extract functional groups (pharmacophores) with a 3D CNN.
-   - **Voxel Mapping:** Encodes explicit spatial pharmacophore distributions into 3D voxel maps, preserving the crucial geometric and chemical context often lost in 1D/2D models.
-
-2. **3D Swin Transformer for Protein Representation:**
-   - **Efficient Abstraction:** Utilizes a condensed 3D voxelization strategy for protein structures.
-   - **Global Context:** Employs a 3D Swin Transformer to capture global structural contexts and long-range spatial dependencies, effectively bypassing the computational bottlenecks associated with large-scale atomic graph modeling.
-
-### Key Contributions
-* **Dual-Prediction Task:** Simultaneously optimizes for binary classification (DTI) and continuous regression (DTA) within a single framework.
-* **Spatial Pharmacophore Encoding:** A novel strategy that maps functional groups into 3D space, enhancing the model's chemical interpretability.
-* **Multimodal Fusion:** Hierarchically integrates 1D sequence embeddings (ESM, Morgan Fingerprints) with 3D structural voxel features via a hybrid MLP-Transformer network.
-* **SOTA Performance:** Demonstrates superior predictive power across multiple benchmark datasets and proves highly effective in cold-start (unseen drugs/targets) scenarios.
+### Core Architectural Innovations:
+1. [cite_start]**Pharmacophore-Aware Drug Representation:** - Combines a GNN-based super-node aggregation mechanism to extract functional groups (pharmacophores) from 2D graphs[cite: 9, 54, 131].
+   - [cite_start]Utilizes a 3D CNN to encode explicit spatial pharmacophore distributions via 7-channel voxel maps (H-Donor, H-Acceptor, Aromatic, etc.)[cite: 9, 150, 153].
+2. [cite_start]**3D Swin Transformer for Protein Encoding:** - Employs a condensed 3D voxelization strategy (4 channels: density, hydrophobicity, and charge) for protein structures[cite: 10, 204, 237].
+   - [cite_start]Captures global structural contexts and long-range dependencies using a **3D Swin Transformer** (W-MSA/SW-MSA), bypassing traditional all-atom computational bottlenecks[cite: 10, 52, 242].
+3. [cite_start]**Dual-Prediction Module:** The framework hierarchically fuses features via Cross-Scale Attention and outputs through two dedicated heads[cite: 53, 72, 111]:
+   - [cite_start]**DTA Regression Head:** Predicts continuous affinity values (e.g., $pK_d$, $pK_i$), optimized via MSE Loss[cite: 72, 270].
+   - [cite_start]**DTI Classification Head:** Predicts binary interaction probability via a Softmax layer[cite: 72, 271].
 
 ---
 
 ## 🧠 Project Structure
-The project is organized into modular components for feature extraction, 3D voxelization, and the training pipeline.
+The implementation is organized into modular components for structural abstraction and model training:
 
 | File Name | Description |
 | :--- | :--- |
-| `config.py` | Global configuration for hyperparameters, voxel grid resolution, Swin Transformer settings, and data paths. |
-| `voxel_utils.py` | Core utilities for **3D voxelization**, pharmacophore mapping, and 3D coordinate processing for both drugs and proteins. |
-| `models.py` | Architecture definition of **FIST-DTIA**, including the 3D CNN voxel encoder, the 3D Swin Transformer, and the ESM/Fingerprint integration modules. |
-| `dataset.py` | Custom data loaders for processing PDB structures, SMILES, and pre-computed ESM embeddings into multi-modal inputs. |
-| `train_dual.py` | Main execution script for the dual-task training loop, implementing multi-task loss functions and performance monitoring. |
-| `metrics.py` | Comprehensive evaluation suite for both classification (Acc, AUC, AUPR) and regression (RMSE, MSE, CI, $r^2$). |
+| `mains.py` | [cite_start]Primary execution script for the **5-fold cross-validation** workflow and dual-task training/evaluation[cite: 308]. |
+| `models.py` | [cite_start]Defines the `HGDDTI` architecture, featuring the `StructuralEncoder`, `3D Swin Transformer` modules, and the multi-modal fusion head[cite: 53]. |
+| `utilss.py` | [cite_start]Core utilities for **3D Voxelization**, pharmacophore mapping, and graph construction with super-nodes[cite: 67, 148]. |
+| `configss.py` | [cite_start]Configuration for hyperparameters (e.g., d_model: 256), voxel resolution ($32^3$), and data paths[cite: 151, 619]. |
+| `evaluations.py` | [cite_start]Metric calculations for classification (Acc, AUC, AUPR) and regression (MSE, CI, $R_m^2$)[cite: 330, 331]. |
 
 ---
 
-## 📁 Dataset & Inputs
-FIST-DTIA requires integrated sequence and structural data to perform 3D-aware predictions.
+## 📁 Datasets & Evaluation
+[cite_start]FIST-DTIA is rigorously validated across 12 benchmark datasets[cite: 338]:
 
-### Benchmark Datasets
-The model has been rigorously validated on standard DTI/DTA benchmarks:
-* **Davis & KIBA:** For affinity regression and interaction classification.
-* **BindingDB:** Large-scale experimental binding data.
-* **PDBbind:** High-quality 3D structural data for protein-ligand complexes.
-
-### Required Inputs
-1. **Protein PDB Files:** Used for 3D voxelization and Swin Transformer encoding.
-2. **Ligand SMILES/SDF:** For generating Morgan fingerprints and 3D pharmacophore voxel maps.
-3. **ESM Embeddings:** Pre-computed sequence features (e.g., ESM-2 or ESM-1b) for proteins.
-
-
+* [cite_start]**DTI Classification:** Validated on DrugBank, Davis, KIBA, IC, E, BindingDB, BioSNAP, and Human datasets [cite: 283-291].
+* [cite_start]**DTA Regression:** Quantitatively assessed on Davis, KIBA, Metz, and ToxCast benchmarks[cite: 295, 303].
+* [cite_start]**Cold-Start Scenarios:** Proven robust in "Cold-drug" and "Cold-drug & target" settings, demonstrating superior generalization to novel chemical entities [cite: 315-322].
 
 ---
 
-## 🛠️ Environment Setup
-Ensure you have a Linux environment with **CUDA 11.8/12.x** and an NVIDIA GPU (RTX 3090/4090 recommended).
+## 🛠️ Setup & Usage
 
+### Installation
 ```bash
-# 1. Create and activate environment
-conda create -n fist_dtia python=3.9
-conda activate fist_dtia
+# Clone the repository
+git clone [https://github.com/aliveadult/FIST-DTIA.git](https://github.com/aliveadult/FIST-DTIA.git)
+cd FIST-DTIA
 
-# 2. Install PyTorch and 3D processing libraries
-pip install torch torchvision torchaudio
-pip install torch-geometric torch-sparse torch-cluster
-pip install rdkit-pypi biopython scipy pandas tqdm
-
-# 3. Install ESM for sequence embeddings
-pip install fair-esm
+# Install dependencies
+pip install torch torch-geometric rdkit biopython pandas tqdm
