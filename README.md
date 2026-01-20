@@ -30,11 +30,13 @@ These benchmarks assess the model's ability to discriminate between interacting 
 - **Specialized Families (E, GPCR, IC)**: These "gold standard" benchmarks focus on Enzymes (E), G Protein-Coupled Receptors (GPCR), and Ion Channels (IC), providing a focused evaluation on specific protein folds.
 ---
 ## 📂 Implementation Architecture
-The project is structured to ensure reproducibility and efficiency across GPU-accelerated environments.
-- **mains.py**: Orchestrates the 5-fold cross-validation workflow and manages the dual-task training pipeline, ensuring balanced evaluation across regression and classification.
-- **models.py**: Contains the primary model definition, housing the CNN/Transformer encoding branches and the dual-head projection modules.
-- **utilss.py**: Handles the core geometric logic, including **K-Means structural clustering** and 3D voxelization for both ligands and proteins.
-- **configss.py**: Stores all critical hyperparameters, such as the 256-dimensional latent space, learning rates, and the $32^3$ voxel grid resolution.
+The project is modularized for clarity and high-performance computing:
+
+* **mains.py**: Orchestrates the **5-Fold Cross-Validation** workflow. It includes a robust training/evaluation loop with **PyTorch DataParallel** support for multi-GPU acceleration.
+* **models.py**: Defines the `HGDDTI` architecture, including the `ProteinStructuralEncoder` (Swin-3D), `DrugPharmacophoreEncoder` (CNN-3D), and `CrossAttentionFusion`.
+* **utilss.py**: Contains the geometry engine. It handles RDKit-based **3D pharmacophore voxelization** for drugs and Biopython-based **C-alpha voxelization** for proteins.
+* **configss.py**: Centralized hyperparameter management (e.g., $32^3$ voxel size, $128$ Swin embedding dimension, $256$ latent fusion dimension).
+* **evaluations.py**: Utility functions for classification metrics (AUC, AUPR, F1) and statistical analysis.
 
 ---
 
