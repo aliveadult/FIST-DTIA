@@ -1,5 +1,6 @@
 # FIST-DTIA: Pharmacophore-Aware 3D Voxelization for Drug-Target Interaction and Affinity Dual-Prediction
 
+[SwinBlock and pharmacophore graph convolution combined with drug-protein mixed attention.pdf](https://github.com/user-attachments/files/24727157/SwinBlock.and.pharmacophore.graph.convolution.combined.with.drug-protein.mixed.attention.pdf)
 
 
 ## 🧪 Scientific Framework
