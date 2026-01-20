@@ -24,7 +24,7 @@ These benchmarks assess the model's ability to discriminate between interacting 
 - **BindingDB**: A massive repository containing high target diversity with over 49,000 targets, utilized to test the generalizability of molecular recognition. [Website](https://www.bindingdb.org/).
 - **BioSNAP**: Collected from the Stanford Network Analysis Platform, it provides human-centric chemical-gene interaction networks for assessing clinically relevant pairs. [Link](https://snap.stanford.edu/biodata/).
 - **DrugBank**: Supplies high-confidence balanced pairs of compounds and targets, essential for evaluating model robustness on clinically validated data. [Database](https://go.drugbank.com/).
-- **Specialized Families (E, GPCR, IC)**: These "gold standard" benchmarks focus on Enzymes (E), G Protein-Coupled Receptors (GPCR), and Ion Channels (IC), providing a focused evaluation on specific protein folds. [Source](https://web.archive.org/web/20200218114639/http://web.kuicr.kyoto-u.ac.jp/supp/yamanishi/drugtarget/).
+- **Specialized Families (E, GPCR, IC)**: These "gold standard" benchmarks focus on Enzymes (E), G Protein-Coupled Receptors (GPCR), and Ion Channels (IC), providing a focused evaluation on specific protein folds.
 
 ---
 
