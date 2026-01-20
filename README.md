@@ -1,6 +1,6 @@
 # FIST-DTIA: Pharmacophore-Aware 3D Voxelization for Drug-Target Interaction and Affinity Dual-Prediction
 
-![image](https://github.com/aliveadult/FIST-DTIA/blob/main/SwinBlock%20and%20pharmacophore%20graph%20convolution%20combined%20with%20drug-protein%20mixed%20attention.pdf)
+![image](https://github.com/aliveadult/FIST-DTIA/blob/main/SwinBlock%20and%20pharmacophore%20graph%20convolution%20combined%20with%20drug-protein%20mixed%20attention)
 *Figure: The FIST-DTIA framework integrates 1D sequence data, 2D pharmacophore-aware graphs, and 3D structural voxels via a Swin Transformer and Cross-Scale Attention for dual-task prediction.*
 
 ## 🧪 Scientific Framework
