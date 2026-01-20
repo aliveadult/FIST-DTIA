@@ -3,55 +3,52 @@
 
 
 ## 🧪 Scientific Framework
-[cite_start]FIST-DTIA (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) introduces a unified multimodal framework designed to address the "representational blindness" of sequence-only models in drug discovery[cite: 8, 30]. [cite_start]Unlike traditional approaches that rely on simplified 1D strings or 2D graphs, FIST-DTIA explicitly models the three-dimensional "lock-and-key" mechanism governing biological recognition[cite: 9, 28]. [cite_start]By synergizing chemical-identity-aware voxels with a global structural protein encoder, the model achieves high-fidelity molecular recognition across diverse therapeutic targets[cite: 12].
+FIST-DTIA (Pharmacophore-aware 3D Voxelization for Drug-target Interaction and Affinity) introduces a unified multimodal framework designed to address the representational limitations of sequence-only models in drug discovery. Unlike traditional approaches that rely on simplified 1D strings or 2D graphs, FIST-DTIA explicitly models the three-dimensional "lock-and-key" mechanism governing biological recognition. By synergizing chemical-identity-aware voxels with a global structural protein encoder, the model achieves high-fidelity molecular recognition across diverse therapeutic targets.
 
-### Architectural Innovations
-[cite_start]The framework is characterized by a five-branch encoding strategy that converges into a hierarchical fusion head[cite: 53]. [cite_start]Small molecules are represented through a pharmacophore-aware strategy that maps key functional groups into a 7-channel 3D dense grid, which is subsequently processed by a cross-channel 3D CNN to capture spatial chemical arrangements[cite: 147, 150]. [cite_start]Simultaneously, protein structures are abstracted into condensed 3D voxel maps and analyzed using a **3D Swin Transformer**[cite: 52]. [cite_start]This architecture utilizes alternating Window-based and Shifted-Window Multi-head Self-Attention to capture long-range spatial dependencies and allosteric signals, resolving the scalability constraints inherent to all-atom modeling[cite: 59, 233]. [cite_start]The final integration is managed by a **Cross-Scale Attention** module that fuses structural and sequence features (ESM and Morgan Fingerprints) before passing them to specialized heads for binary interaction classification and continuous affinity regression[cite: 70, 111].
+The framework is characterized by a five-branch encoding strategy that converges into a hierarchical fusion head. Small molecules are represented through a pharmacophore-aware strategy that maps key functional groups into a 7-channel 3D dense grid, which is subsequently processed by a cross-channel 3D CNN to capture spatial chemical arrangements. Simultaneously, protein structures are abstracted into condensed 3D voxel maps and analyzed using a **3D Swin Transformer**. This architecture utilizes alternating Window-based and Shifted-Window Multi-head Self-Attention to capture long-range spatial dependencies and allosteric signals, resolving the scalability constraints inherent to all-atom modeling. The final integration is managed by a **Cross-Scale Attention** module that fuses structural and sequence features (ESM and Morgan Fingerprints) before passing them to specialized heads for binary interaction classification and continuous affinity regression.
 
 ---
 
 ## 📊 Benchmark Datasets and Resources
-[cite_start]FIST-DTIA was rigorously validated on twelve public benchmarks, spanning varied species, target families (e.g., kinases, nuclear receptors, ion channels), and experimental measurement types[cite: 338, 339].
+FIST-DTIA was rigorously validated on twelve public benchmarks, spanning varied species, target families (e.g., kinases, nuclear receptors, ion channels), and experimental measurement types.
 
 ### Drug-Target Affinity (DTA) Regression
-[cite_start]These datasets are used to evaluate the model's capacity to quantify binding strength via metrics such as Concordance Index (CI) and Mean Squared Error (MSE)[cite: 407].
-* [cite_start]**Davis**: A kinase-focused dataset providing $pK_d$ values for 442 drugs and 68 targets[cite: 297, 299]. Available via [Therapeutics Data Commons](https://tdcommons.ai/multi_pred_tasks/dta/).
-* [cite_start]**KIBA**: A large-scale benchmark that integrates different bioactivity types into a single normalized KIBA score[cite: 300]. Available via [TDC](https://tdcommons.ai/multi_pred_tasks/dta/).
-* [cite_start]**Metz**: Features $pK_i$ values for over 35,000 pairs involving 170 targets[cite: 299, 301].
-* [cite_start]**ToxCast**: A extensive toxicity dataset providing $AC_{50}$ values for over 300,000 chemical-protein interactions[cite: 303]. Accessible via [EPA ToxCast](https://www.epa.gov/chemical-research/toxicity-forecasting).
+These datasets evaluate the model's capacity to quantify binding strength via metrics such as Concordance Index (CI) and Mean Squared Error (MSE).
+- **Davis**: A kinase-focused dataset providing $pK_d$ values for 442 drugs and 68 targets. It serves as a gold standard for testing regression fidelity. Available via [Therapeutics Data Commons](https://tdcommons.ai/multi_pred_tasks/dta/).
+- **KIBA**: A large-scale benchmark that integrates different bioactivity types (IC50, Kd, Ki) into a single normalized KIBA score, offering a comprehensive view of binding profiles. Available via [TDC](https://tdcommons.ai/multi_pred_tasks/dta/).
+- **Metz**: Includes $pK_i$ values for over 35,000 pairs involving 170 targets, providing a robust test for rank correlation and predictive stability.
+- **ToxCast**: An extensive chemical toxicity dataset provided by the EPA, containing $AC_{50}$ values for over 300,000 interactions, representing a significant challenge for large-scale affinity prediction. Accessible via [EPA ToxCast](https://www.epa.gov/chemical-research/toxicity-forecasting).
 
 ### Drug-Target Interaction (DTI) Classification
-[cite_start]These benchmarks test the model's ability to discriminate between interacting and non-interacting pairs[cite: 282].
-* [cite_start]**BindingDB**: A massive repository containing high target diversity (over 49,000 targets)[cite: 285, 293]. [Website](https://www.bindingdb.org/).
-* [cite_start]**BioSNAP**: Derived from the Stanford Network Analysis Platform, providing human-centric chemical-gene interaction networks[cite: 290]. [Link](https://snap.stanford.edu/biodata/).
-* [cite_start]**DrugBank**: Supplies clinically relevant balanced pairs of compounds and targets[cite: 284, 286]. [Database](https://go.drugbank.com/).
-* [cite_start]**Specialized Sets (E, GPCR, IC)**: Nuclear receptors, G protein-coupled receptors, and Ion Channels derived from the Yamanishi "gold standard" benchmarks[cite: 291]. [Source](https://web.archive.org/web/20200218114639/http://web.kuicr.kyoto-u.ac.jp/supp/yamanishi/drugtarget/).
+These benchmarks assess the model's ability to discriminate between interacting and non-interacting pairs in binary scenarios.
+- **BindingDB**: A massive repository containing high target diversity with over 49,000 targets, utilized to test the generalizability of molecular recognition. [Website](https://www.bindingdb.org/).
+- **BioSNAP**: Collected from the Stanford Network Analysis Platform, it provides human-centric chemical-gene interaction networks for assessing clinically relevant pairs. [Link](https://snap.stanford.edu/biodata/).
+- **DrugBank**: Supplies high-confidence balanced pairs of compounds and targets, essential for evaluating model robustness on clinically validated data. [Database](https://go.drugbank.com/).
+- **Specialized Families (E, GPCR, IC)**: These "gold standard" benchmarks focus on Enzymes (E), G Protein-Coupled Receptors (GPCR), and Ion Channels (IC), providing a focused evaluation on specific protein folds. [Source](https://web.archive.org/web/20200218114639/http://web.kuicr.kyoto-u.ac.jp/supp/yamanishi/drugtarget/).
 
 ---
 
-## 📂 Implementation Details
-[cite_start]The project is structured for high-performance training on Linux-based GPU clusters[cite: 327].
+## 📂 Implementation Architecture
+The project is structured to ensure reproducibility and efficiency across GPU-accelerated environments.
 
-| Component | Responsibility |
-| :--- | :--- |
-| **mains.py** | Orchestrates 5-fold cross-validation and manages the dual-task training pipeline. |
-| **models.py** | Houses the `HGDDTI` class, defining the CNN/Transformer branches and the dual-head projection. |
-| **utilss.py** | Handles **K-Means structural clustering** and 3D voxelization logic for ligands and proteins. |
-| **configss.py** | Stores hyperparameters, including the 256-dimensional latent space and $32^3$ voxel grid resolution. |
+- **mains.py**: Orchestrates the 5-fold cross-validation workflow and manages the dual-task training pipeline, ensuring balanced evaluation across regression and classification.
+- **models.py**: Contains the primary model definition, housing the CNN/Transformer encoding branches and the dual-head projection modules.
+- **utilss.py**: Handles the core geometric logic, including **K-Means structural clustering** and 3D voxelization for both ligands and proteins.
+- **configss.py**: Stores all critical hyperparameters, such as the 256-dimensional latent space, learning rates, and the $32^3$ voxel grid resolution.
 
 ---
 
 ## 🛠️ Usage Guide
-FIST-DTIA requires Python 3.9+ and CUDA 11.8/12.4. 
+FIST-DTIA is designed for Python 3.9+ environments with CUDA support.
 
 ```bash
 # Clone the repository
 git clone [https://github.com/aliveadult/FIST-DTIA.git](https://github.com/aliveadult/FIST-DTIA.git)
 cd FIST-DTIA
 
-# Install core dependencies
+# Install dependencies
 pip install torch torch-geometric rdkit-pypi biopython scikit-learn pandas tqdm
 
-# Configuration: Update configss.py with local paths for ESM embeddings and PDB files
 # Execute training and evaluation
+# Ensure paths for ESM embeddings and PDB files are configured in configss.py
 python mains.py
